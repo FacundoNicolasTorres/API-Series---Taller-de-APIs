@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "nombre": "Arcane",
+        "temporadas": "2",
+        "plataforma": "Netflis",
+        "estaDisponible": true
+    },
+    {
+        "id": 2,
+        "nombre": "GoT",
+        "temporadas": "8",
+        "plataforma": "HBO",
+        "estaDisponible": true
+    },
+    {
+        "id": 3,
+        "nombre": "Los simuladores",
+        "temporadas": "2",
+        "plataforma": "Prime",
+        "estaDisponible": true
+    }
+]

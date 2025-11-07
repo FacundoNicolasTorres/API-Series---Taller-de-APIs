@@ -35,8 +35,26 @@ const addSerie = (req, res) => {
     res.status(201).json(serie);
 };
 
+const updateSerie = (req, res) => {
+    const idSerie = req.params.idSerie;
+    const { nombre, temporadas, plataforma, estaDisponible } = req.body
+    //Traer serie con id idSerie
+    const serie = series.find((serie) => serie.id  == idSerie)
+
+    if(serie){
+        serie.nombre = nombre;
+        serie.temporadas = temporadas;
+        serie.plataforma = plataforma;
+        serie.estaDisponible = estaDisponible;
+
+        res.status(200).json(serie);
+    }else{
+        res.status(404).json({mensajeError: `La serie con in ${idSerie} no fue encontrada`})
+    }
+};
+
 const deleteSerie = (req, res) => {
-    const idSerie = req.params.id;
+    const idSerie = req.params.idSerie;
     
     const index = series.findIndex((s) => s.id == idSerie);
     if (index === -1)
@@ -47,4 +65,4 @@ const deleteSerie = (req, res) => {
     res.status(200).json(series);
 };
 
-module.exports = { getSeries, getSerieById, addSerie, deleteSerie }
+module.exports = { getSeries, getSerieById, addSerie, deleteSerie, updateSerie }

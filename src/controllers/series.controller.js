@@ -11,16 +11,13 @@ const getSerieById = (req, res) => {
     const data = series;
     const serie = data.filter((s) => s.id == idSerie)
 
-    if(serie.length == 0) 
-        res.status(404).json({mensajeError: `Serie con id: ${idSerie} no pudo encontrarse`});
-
     res.status(200).json(serie);
 };
 
 const addSerie = (req, res) => {
     const data = req.body;
-    const id = series.reduce((max, serie) =>  serie.id > max ? serie.id : max, 0) + 1;
-    const serie = {id, ...data};
+    const id = series.reduce((max, serie) => serie.id > max ? serie.id : max, 0) + 1;
+    const serie = { id, ...data };
     //otra forma
     //const { nombre, temporadas, plataforma, disponible } = req.body
     /*const serie = {
@@ -39,26 +36,20 @@ const updateSerie = (req, res) => {
     const idSerie = req.params.idSerie;
     const { nombre, temporadas, plataforma, estaDisponible } = req.body
     //Traer serie con id idSerie
-    const serie = series.find((serie) => serie.id  == idSerie)
+    const serie = series.find((serie) => serie.id == idSerie)
 
-    if(serie){
-        serie.nombre = nombre;
-        serie.temporadas = temporadas;
-        serie.plataforma = plataforma;
-        serie.estaDisponible = estaDisponible;
+    serie.nombre = nombre;
+    serie.temporadas = temporadas;
+    serie.plataforma = plataforma;
+    serie.estaDisponible = estaDisponible;
 
-        res.status(200).json(serie);
-    }else{
-        res.status(404).json({mensajeError: `La serie con in ${idSerie} no fue encontrada`})
-    }
+    res.status(200).json(serie);
 };
 
 const deleteSerie = (req, res) => {
     const idSerie = req.params.idSerie;
-    
+
     const index = series.findIndex((s) => s.id == idSerie);
-    if (index === -1)
-        res.status(404).json({mensajeError: `El id ${idSerie} no fue encontrado`});
 
     series.splice(index, 1);
 

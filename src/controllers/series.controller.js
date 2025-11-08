@@ -1,59 +1,45 @@
-const series = require('../../data/series.json');
+const { Serie } = require('../db/models');
 
-const getSeries = (req, res) => {
-    const data = series;
+const getSeries = async (req, res) => {
+    const data = await Serie.findAll({});
 
     res.status(200).json(data);
 };
 
-const getSerieById = (req, res) => {
+const getSerieById = async (req, res) => {
     const idSerie = req.params.idSerie;
-    const data = series;
-    const serie = data.filter((s) => s.id == idSerie)
+    const serie = await Serie.findByPk(idSerie)
 
     res.status(200).json(serie);
 };
 
-const addSerie = (req, res) => {
-    const data = req.body;
-    const id = series.reduce((max, serie) => serie.id > max ? serie.id : max, 0) + 1;
-    const serie = { id, ...data };
-    //otra forma
-    //const { nombre, temporadas, plataforma, disponible } = req.body
-    /*const serie = {
-        id,
-        nombre,
-        temporadas,
-        plataforma,
-        disponible
-    }*/
-    series.push(serie);
+const addSerie = async (req, res) => {
+    const newSerie = req.body;
+    const record = await Serie.create(newSerie)
 
-    res.status(201).json(serie);
+    res.status(201).json(record);
 };
 
-const updateSerie = (req, res) => {
+const updateSerie = async (req, res) => {
     const idSerie = req.params.idSerie;
-    const { nombre, temporadas, plataforma, estaDisponible } = req.body
-    //Traer serie con id idSerie
-    const serie = series.find((serie) => serie.id == idSerie)
+    const serieUpdate = req.body
+    
+    const update = await Serie.update(serieUpdate, {
+        where : {id: idSerie}
+    });
 
-    serie.nombre = nombre;
-    serie.temporadas = temporadas;
-    serie.plataforma = plataforma;
-    serie.estaDisponible = estaDisponible;
-
-    res.status(200).json(serie);
+    //Devuelve la cantidad de filas modificadas, en este caso 1
+    res.status(200).json(update);
 };
 
-const deleteSerie = (req, res) => {
+const deleteSerie = async (req, res) => {
     const idSerie = req.params.idSerie;
+    const serieDelete = await Serie.findByPk(idSerie)
 
-    const index = series.findIndex((s) => s.id == idSerie);
+    await serieDelete.destroy()
 
-    series.splice(index, 1);
-
-    res.status(200).json(series);
+    //Es mas correcto devolver el status code 204 que no devuelve un mensaje, el servidor solo confirma que la accion se cumplio
+    res.status(200).json({mensajeExito: "Fue eliminada con exito"});
 };
 
 module.exports = { getSeries, getSerieById, addSerie, deleteSerie, updateSerie }

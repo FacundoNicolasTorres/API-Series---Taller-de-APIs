@@ -1,14 +1,14 @@
-const series = require('../../data/series.json');
+const { Serie } = require('../db/models');
 
-const existSerie = (req, res, next) => {
+const existSerie = async (req, res, next) => {
     const idSerie = req.params.idSerie;
-    const data = series;
-    const serie = data.filter((s) => s.id == idSerie)
+    const serie = await Serie.findByPk(idSerie)
 
-    if(!(serie.length == 0)) 
-        next()
-        
-    res.status(404).json({mensajeError: `Serie con id: ${idSerie} no pudo encontrarse`});
+    if(!serie) 
+        res.status(404).json({mensajeError: `Serie con id: ${idSerie} ${serie} no pudo encontrarse`});
+    
+    req.serie = serie;
+    next()
 }
 
 module.exports = { existSerie };

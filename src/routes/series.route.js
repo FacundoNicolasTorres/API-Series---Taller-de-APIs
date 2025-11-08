@@ -1,4 +1,3 @@
-const series = require('../../data/series.json');
 const { Router } = require("express");
 const route = Router();
 
